@@ -1,0 +1,74 @@
+// Copyright (C) 2021 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+import QtQuick 6.2
+import QtQuick.Window
+import ytBank
+import QtQuick.VirtualKeyboard 6.2
+import QtQuick.VirtualKeyboard.Settings
+import QtQuick.Controls
+
+
+
+Window {
+    width: Constants.width
+    height: Constants.height
+
+    visible: true
+    title: "YTB Bank     |     Yatır Bank Müşteri Özel İlgilenme Alanı"
+
+    // add stackwiew
+    StackView {
+            id: stackView
+            initialItem:"passForgetPage.qml"
+            anchors.fill: parent
+        }
+
+    Screen01 {
+
+        id: loginScreen
+
+    }
+    Component {
+            id: passForgetPage
+
+        }
+
+    // add "passForgetPage.qml" page as contentItem.
+
+
+
+
+
+    //----------- Auto created for keyboard----------------
+    InputPanel {
+        id: inputPanel
+        property bool showKeyboard :  active
+        signal keyboardActiveChanged(bool isActive)
+
+        y: showKeyboard ? parent.height - height : parent.height
+        Behavior on y {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+        //anchors.leftMargin: Constants.width/10
+        //anchors.rightMargin: Constants.width/10
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        onShowKeyboardChanged:
+        {
+            showKeyboard ? keyboardActiveChanged(true) : keyboardActiveChanged(false);
+            console.log(showKeyboard);
+        }
+    }
+    function keyboardActive() {
+        console.log("Klavye açık.");
+    }
+    //-----------------------------------------------------
+
+}
+
+

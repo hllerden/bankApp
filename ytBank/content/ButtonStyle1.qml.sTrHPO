@@ -1,0 +1,17 @@
+import QtQuick 6.2
+
+
+//import QtGraphicalEffects 1.15
+import QtQuick.Controls
+
+Button {
+
+    // lets create simple Button
+    //
+
+    text: qsTr("Button")
+    background: Rectangle {
+        color: control.pressed ? "#17a81a" : "#21be2b"
+        radius: 4
+    }
+}

@@ -1,0 +1,31 @@
+#ifndef LOGINMANAGER_H
+#define LOGINMANAGER_H
+
+#include <QObject>
+#include <QDebug>
+#include <QtSql>
+#include <QSqlError>
+
+
+class loginManager : public QObject
+{
+    Q_OBJECT
+
+private:
+    QSqlQuery query;
+    QDir databasePath;
+    QString path=databasePath.currentPath()+"/userInformations.db"; // Not "myDb.db"
+    QSqlDatabase db;
+    db=QSqlDatabase::addDatabase("QSQLITE");
+public:
+    explicit loginManager(QObject *parent = nullptr);
+    ~loginManager();
+    bool login(const QString &username, const QString &password);
+    bool addPerson(const QString &username, const QString &password, const QString &firstname, const QString &lastname, int age);
+
+signals:
+    void loginResult(bool success);
+
+};
+
+#endif // LOGINMANAGER_H

@@ -1,0 +1,19 @@
+#ifndef LOGINMANAGER_H
+#define LOGINMANAGER_H
+
+#include <QObject>
+#include <QDebug>
+#include <SqlDatabase>
+
+
+class loginManager : public QObject
+{
+    Q_OBJECT
+public:
+    explicit loginManager(QObject *parent = nullptr);
+    ~loginManager();
+signals:
+
+};
+
+#endif // LOGINMANAGER_H
