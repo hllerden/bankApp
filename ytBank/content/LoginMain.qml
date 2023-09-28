@@ -47,7 +47,7 @@ Rectangle {
 
 
         StackView {
-            id: stackView1
+            id: stackViewLogin
             x: 500
             y: 80
             width: 450
@@ -61,6 +61,14 @@ Rectangle {
         {
             id:logLogin
             LogLogin
+            {
+
+            }
+        }
+        Component
+        {
+            id:logForgetPassword
+            LogPassForget
             {
 
             }
