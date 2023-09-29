@@ -25,8 +25,15 @@ private:
     QString path=databasePath.currentPath()+"/userInformations.db"; // Not "myDb.db"
 signals:
     void loginResult(const bool success);
-
+    void passwordForgetResponse(const QVariant &response);
 public slots:
+    //bool loginPassForgetStep1(const QString &username, const QString &email);                           // ilk olarak kullanıcı adı ve email doğruysa true döndürüp kullanıcıya güvenlik sorusunu soracak.
+    //bool loginPassForgetStep2(const QString &username, const QString &email, const QString &sec_ans);   // güvenlik sorusunun cevabı doğruysa true döndürüp kullanıcıya yeni şifresini soracak.
+    //bool loginPassForgetStep3(const QString &username, const QString &email, const QString &newPass);   // yeni şifre doğruysa true döndürüp kullanıcıya şifresini değiştirdiğini bildirecek.
+
+    bool loginPassForget(const QString &username, const QString &email,const QString &sec_ans = QString() ,const QString &newPass = QString());
+    QVariant loginPassForget2(const QString &username, const QString &email,  const QString &newPass = QString());
+
     bool loginRequest(const QString &username, const QString &password);
     void doSomething();
 };

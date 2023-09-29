@@ -204,7 +204,6 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
 QVariant loginManager::loginPassForget2(const QString &username, const QString &email, const QString &newPass)
 {
     QVariantList result;
-    QVariantMap userInfo;
     // Qvaryant Yapısı  | bool isErrorMessageExis?|error Message|info| 1.adım user&mail check Bool | user first name | String Question to Qml | secQuestCheck Bool |newPassChekOk&chance bool |
 
     if(!username.isEmpty() & !email.isEmpty())
@@ -223,37 +222,20 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
         query.bindValue(":email", email);
 
         if((query.exec()&&query.next()))
-        {   QVariantMap userInfo;
+        {
             qDebug()<< "[loginPassForget::2.Aşama]"  << "PassForget Login result:" << true;
 
-            userInfo["username"] = query.value(1).toString();
-            userInfo["password"] = query.value(2).toString();
-            userInfo["email"] = query.value(3).toInt();
-            userInfo["firstname"] = query.value(4).toString();
-            userInfo["lastname"] = query.value(5).toString();
-            userInfo["age"] = query.value(6).toInt();
-            userInfo["sec_ques"] = query.value(7).toString();
-            userInfo["sec_ans"] = query.value(8).toString();
 
-            result << true <<userInfo;
-            emit passwordForgetResponse(QVariant::fromValue(result));
+            result << true << "Şifre değiştirme işlemi başarılı" << "";
+
             return QVariant::fromValue(result);
-        }
-        else
-        {
-            result << false << "Kullanıcı adı veya email uyuşmuyor!" << "";
-                emit passwordForgetResponse(QVariant::fromValue(result));
-
-                return QVariant::fromValue(result);
         }
 
 
     }
     else
     {
-        result << false << "Kullanıcı adı veya email boş olamaz!" << "";
-            emit passwordForgetResponse(QVariant::fromValue(result));
-
+        result << true << "Kullanıcı adı veya email boş olamaz" << "";
         return QVariant::fromValue(result);
     }
 

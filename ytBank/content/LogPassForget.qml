@@ -3,10 +3,15 @@ import QtQuick.Controls 6.2
 import QtQuick.VirtualKeyboard
 import ytBank
 
+
+
 Item {
     id: forgetPassPageBase
     anchors.fill: stackViewLogin
     visible:true
+
+    property var userInfo: null
+
     Rectangle {
         visible:true
 
@@ -89,9 +94,17 @@ Item {
             backgroundDefaultColor: "#e2ae38"
             onClicked: {
                 //loginManager.login(customeridTxt.text,passwordTxt.text)
-                if(LoginManager.loginRequest(textFieldCostumer.text,textFieldPassword.text)){
+                if(LoginManager.loginPassForget(textFieldforgetCostumer.text,textFieldforgetEmail.text)){
                     //stackView.push(passwordForget)
                 }
+                LoginManager.loginPassForget2(textFieldforgetCostumer.text,textFieldforgetEmail.text);
+
+
+
+
+
+
+
             }
             buttonDropShadow: false
             anchors.horizontalCenterOffset: 0
@@ -154,6 +167,17 @@ Item {
             text:qsTr("We will ask you the answer to the security question \n registered in our system so that we can identify you.")
         }
 
+        Label {
+
+            id:labelErrorPassForget1
+            visible:false
+            x: 74
+            y: 265
+            font.pixelSize: 15
+            layer.enabled: false
+            text: qsTr("Verify Indetity")
+        }
+
     }
     Rectangle {
         id: forgetPassPage2
@@ -207,22 +231,18 @@ Item {
             contentItemTextColor: "#ffffff"
             backgroundDefaultColor: "#e2ae38"
             onClicked: {
-                //loginManager.login(customeridTxt.text,passwordTxt.text)
-                if(LoginManager.loginRequest(textFieldCostumer.text,textFieldPassword.text)){
-                    //stackView.push(passwordForget)
+               if(textFieldPassForgetSecAns.text==userInfo[1].sec_ans){
+                    console.log("Güvenlik Sorusu Doğru");
+                }
+                else{
+
+                    console.log("Güvenlik Sorusu Yanlış.");
+                   console.log("doğrusu: >"+userInfo[1].sec_ans+"<girdiğin: >"+textFieldPassForgetSecAns.text+"<");
                 }
             }
             buttonDropShadow: false
             anchors.horizontalCenterOffset: 0
-            Connections {
-                target: LoginManager
-                onLoginResult: {
-                    console.log("Login result1:", success);
-                    if(success){
-                        //stackView.push("passwordForgetPage.qml")
-                    }
-                }
-            }
+
         }
 
         TextField {
@@ -292,8 +312,57 @@ Item {
 
         }
     }
+    Rectangle {
+        id: forgetPassPage3
+        visible:false
 
+    }
 
+    function passwordForgetDataGeldi(result,mode) {
+        // inputParam değişkenini kullanabilirsiniz
+        if(mode==0)
+        {
+        var succes = result[0];
+         console.log("Succes: " + succes);
+        if(succes){
+            var username  = result[1].username;
+            var password  = result[1].password;
+            var email  = result[1].email;
+            var firstname  = result[1].firstname;
+            var lastname  = result[1].lastname;
+            var age  = result[1].age;
+            var sec_ques  = result[1].sec_ques;
+            var sec_ans  = result[1].sec_ans;
+
+            console.log("userName: " + username);
+            console.log("password: " + password);
+            console.log("email: " + email);
+            console.log("firstname: " + firstname);
+            console.log("lastname: " + lastname);
+            console.log("age: " + age);
+            console.log("sec_ques: " + sec_ques);
+            console.log("sec_ans: " + sec_ans);
+
+            // 2. sayfaya geçiliyor
+            forgetPassPage1.visible=false;
+            forgetPassPage2.visible=true;
+            labelPassForgetname.text="Hello Dear "+firstname+" "+lastname+" \nhere is your security question set by you.";
+            labelPassForgetSeq.text="Seq Ques : "+sec_ques+"...";
+
+        }
+        else{
+            var errorMessage  = result[1];
+            console.log("errorMessage: " + errorMessage);
+            labelErrorPassForget1.text=errorMessage;
+            labelErrorPassForget1.visible=true;
+        }
+        console.log("Input Parametre: " + result);
+        }
+        else if(mode==1)
+        {
+
+        }
+    }
 
     function listOpenPages() {
         if(stackviewWhichPageOpen){
@@ -306,6 +375,15 @@ Item {
 
         }
     }
+
+    Connections{
+        target: LoginManager
+        onPasswordForgetResponse:{
+            userInfo=response;
+            passwordForgetDataGeldi(response,0);
+        }
+    }
+
 }
 
 
