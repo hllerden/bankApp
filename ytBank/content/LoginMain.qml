@@ -44,7 +44,13 @@ Rectangle {
 
 
 
+    MouseArea {
 
+        id: content1
+        width: parent.width
+        height: parent.height
+        scale: 1
+        onClicked: focus = true
 
         StackView {
             id: stackViewLogin
@@ -52,27 +58,48 @@ Rectangle {
             y: 80
             width: 450
             height: 450
-
+            pushEnter: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 0
+                         to:1
+                         duration: 200
+                     }
+                 }
+                 pushExit: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 1
+                         to:0
+                         duration: 200
+                     }
+                 }
+                 popEnter: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 0
+                         to:1
+                         duration: 200
+                     }
+                 }
+                 popExit: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 1
+                         to:0
+                         duration: 200
+                     }
+                 }
 
 
             initialItem:logLogin
-        }
-        Component
-        {
-            id:logLogin
-            LogLogin
-            {
 
-            }
-        }
-        Component
-        {
-            id:logForgetPassword
-            LogPassForget
-            {
+            Component{id:logLogin;LogLogin{}}
+            Component{id:logForgetPassword;LogPassForget{}}
+         }
 
-            }
-        }
+
+    }
 
 
       }

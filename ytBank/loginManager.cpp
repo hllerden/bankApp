@@ -19,9 +19,12 @@ loginManager::loginManager(QObject *parent)
                       "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                       "username TEXT NOT NULL,"
                       "password TEXT NOT NULL,"
+                      "email TEXT NOT NULL,"
                       "firstname TEXT,"
                       "lastname TEXT,"
-                      "age INTEGER"
+                      "age INTEGER,"
+                      "sec_ques TEXT,"
+                      "sec_ans TEXT"
                       ")");
 
 
@@ -36,7 +39,7 @@ loginManager::loginManager(QObject *parent)
         //QSqlQuery query;
 
         qDebug() << "Database already exists";
-        //addPerson("admin","1234","admin","adminoğlu",26);
+       // addPerson("admin","1234","admin@admin.com","admin","adminoğlu",26,"kayinco tatlı yedi tatladı....","bende öpücük aldım");
     }
 
 }
@@ -69,7 +72,9 @@ bool loginManager::login(const QString &username, const QString &password)
     return success;
 }
 
-bool loginManager::addPerson(const QString &username, const QString &password, const QString &firstname, const QString &lastname, int age)
+bool loginManager::addPerson(const QString &username, const QString &password,const QString &email,
+                             const QString &firstname, const QString &lastname, int age,
+                             const QString &sec_ques, const QString &sec_ans)
 {
     QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(path);
@@ -83,14 +88,17 @@ bool loginManager::addPerson(const QString &username, const QString &password, c
     } else {
         qDebug() << "Veritabanına başarıyla bağlandı.";
     }
-    query.prepare("INSERT INTO users (username, password, firstname, lastname, age) "
-                  "VALUES (:username, :password, :firstname, :lastname, :age)");
+    query.prepare("INSERT INTO users (username, password,email, firstname, lastname, age,sec_ques,sec_ans) "
+                  "VALUES (:username, :password, :email, :firstname, :lastname, :age, :sec_ques, :sec_ans)");
 
     query.bindValue(":username", username);
     query.bindValue(":password", password);
+    query.bindValue(":email", email);
     query.bindValue(":firstname", firstname);
     query.bindValue(":lastname", lastname);
     query.bindValue(":age", age);
+    query.bindValue(":sec_ques", sec_ques);
+    query.bindValue(":sec_ans", sec_ans);
 
     bool success = query.exec();
     db.close();

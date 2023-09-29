@@ -20,13 +20,10 @@ Window {
     minimumHeight: Constants.height
     visible: true
     title: "YTB Bank     |     Yatır Bank Müşteri Özel İlgilenme Alanı"
-   /* Screen01 {
 
-        id: loginScreen
 
-    }*/
-    //define "passForgetPage.qml"
-
+    // global bool değişkeni yaz
+    property bool stackviewWhichPageOpen: false
 
 
     Flickable {

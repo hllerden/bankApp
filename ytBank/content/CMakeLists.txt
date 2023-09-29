@@ -22,6 +22,7 @@ qt6_add_qml_module(content
         logo/user_textField.svg
         logo/password_textField.svg
         logo/email_textField.svg
+        logo/back_textField.svg
         FloatingButton_Unavailable.svg
         FloatingButton_Available.svg
         FloatingButton_Active.svg

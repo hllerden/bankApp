@@ -16,7 +16,9 @@ public:
     explicit loginManager(QObject *parent = nullptr);
     ~loginManager();
     bool login(const QString &username, const QString &password);
-    bool addPerson(const QString &username, const QString &password, const QString &firstname, const QString &lastname, int age);
+    bool addPerson(const QString &username, const QString &password,const QString &email,
+                   const QString &firstname, const QString &lastname, int age,
+                   const QString &sec_ques, const QString &sec_ans);
 private:
    // bool success= false;
     QDir databasePath;

@@ -2,7 +2,7 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.VirtualKeyboard
 import ytBank
-import "."
+//import "."
 import QtQuick.Studio.Components 1.0
 Item {
     id: item1
@@ -25,6 +25,17 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
+        Label{
+
+            id:loginFailedLabel
+            visible:false
+            x: 102
+            y: 117
+            color:"#ff0000"
+            text: qsTr("Password or customer id is wrong!")
+            font.pointSize: 12
+            font.weight: Font.Bold
+        }
 
         Label {
             id: label4
@@ -76,6 +87,7 @@ Item {
                     onReleased: {
                         forgetPassLabel.color = "#0008FF"
                         stackViewLogin.push(logForgetPassword);
+                        listOpenPages();
                     }
                 }
             }
@@ -93,7 +105,9 @@ Item {
                 selectionColor: "#232323"
                 scale: 1
                 leftPadding: imageTextField.width+15
-                placeholderText: qsTr("Costumer id")
+                //placeholderText: qsTr("Costumer id")
+                placeholderText: textFieldCostumer.activeFocus ? "" : "Costumer id" // Odaklandığında boş bırak
+
                 background:
                     Rectangle {
                     radius: 5
@@ -111,11 +125,23 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter // Y ekseninde ortala
 
                         horizontalAlignment: Image.AlignLeft
-
-
                     }
                 }
                 onTextChanged: { text = text.replace(/\s/g, "");} // Boşluk karakterlerini kaldır
+                Keys.onTabPressed:{ //textFieldPassword.forceActiveFocus()
+                    textFieldPassword.focus=true
+                    console.log("Tab tuşuna basıldı - Alan 1");
+                }
+                Keys.onEnterPressed: {
+                    textFieldPassword.forceActiveFocus()
+                    console.log("Enter tuşuna basıldı - Alan 1");
+
+                }
+                Keys.onReturnPressed: {
+                    textFieldPassword.forceActiveFocus()
+                    console.log("Return tuşuna basıldı - Alan 1");
+                }
+
             }
 
             TextField {
@@ -132,8 +158,17 @@ Item {
                 selectionColor: "#242424"
                 leftPadding: imageTextField1.width+15
                 //rightPadding: imageTextFieldPassVisib.width+25
+                placeholderText: textFieldPassword.activeFocus ? "" : "Password" // Odaklandığında boş bırak
+                //placeholderText: qsTr("Password")
+
+                // Varsayılan stilin bir kopyasını kaydedin
+
+
+
+
                 background: Rectangle {
                     radius: 5
+
                     border.color: "#707070"
                     border.width: 1
                     Image {
@@ -163,8 +198,8 @@ Item {
 
                 }
 
+
                 scale: 1
-                placeholderText: qsTr("Password")
                 onTextChanged: { text = text.replace(/\s/g, "");} // Boşluk karakterlerini kaldır
 
                 MouseArea {
@@ -187,12 +222,25 @@ Item {
                         textFieldPassword.echoMode = TextInput.Password // Şifre modu
                     }
                 }
+                Keys.onTabPressed:{ //textFieldPassword.forceActiveFocus()
+                    buttonlogin.focus=true
+                    console.log("Tab tuşuna basıldı - Alan 1");
 
-
+                }
+                Keys.onEnterPressed: {
+                    buttonlogin.forceActiveFocus()
+                    console.log("Enter tuşuna basıldı - Alan 1");
+                    buttonlogin.clicked();
+                }
+                Keys.onReturnPressed: {
+                    buttonlogin.forceActiveFocus()
+                    console.log("Return tuşuna basıldı - Alan 1");
+                    buttonlogin.clicked();
+                }
             }
 
             ButtonStyle1 {
-                id: button
+                id: buttonlogin
                 x: 75
                 y: 297
                 width: 310
@@ -217,6 +265,12 @@ Item {
                         console.log("Login result1:", success);
                         if(success){
                             //stackView.push("passwordForgetPage.qml")
+                            loginFailedLabel.visible=false
+                        }
+                        else{
+                        console.log("Login başarısız Label görünür hale getirildi.");
+                        loginFailedLabel.visible=true
+
                         }
                     }
                 }
@@ -267,8 +321,18 @@ Item {
 
 
 
-
     }
 
-
+    function listOpenPages() {
+        if(stackviewWhichPageOpen){
+            for (var i = 0; i < stackViewLogin.depth; i++) {
+                var page = stackViewLogin.get(i);
+                if (page) {
+                    console.log("Açık Sayfa:", page);
+                }
+            }
+        }
+    }
 }
+
+
