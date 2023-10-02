@@ -9,14 +9,16 @@ Item {
     id: forgetPassPageBase
     anchors.fill: stackViewLogin
     visible:true
-
     property var userInfo: null
-
+    property bool flagPassCheckRule1: false // Şifre geçerliliğini göstermek için bir bayrak1 6-32
+    property bool flagPassCheckRule2: false // Şifre geçerliliğini göstermek için bir bayrak2 Büyük Küçük Farkı
+    property bool flagPassCheckRule3: false // Şifre geçerliliğini göstermek için bir bayrak3 iki şifre uyumlu
+    property int modePasswordForgetForDB: 0
     Rectangle {
         visible:true
 
         id: forgetPassPage1
-        anchors.fill: parent
+        anchors.fill: parentduration
         width: stackViewLogin.width
         height: stackViewLogin.height
 
@@ -81,10 +83,23 @@ Item {
             placeholderText: qsTr("Costumer id")
             onTextChanged: { text = text.replace(/\s/g, "");}
             leftPadding: imageTextField.width+15
+            Keys.onTabPressed: {
+                textFieldforgetEmail.focus=true
+
+            }
+            Keys.onEnterPressed: {
+                textFieldforgetEmail.focus=true
+
+            }
+            Keys.onReturnPressed:
+            {
+                textFieldforgetEmail.focus=true
+
+            }
         }
 
         ButtonStyle1 {
-            id: button
+            id: forgetPassPage1Button
             x: 75
             y: 297
             width: 310
@@ -93,6 +108,7 @@ Item {
             contentItemTextColor: "#ffffff"
             backgroundDefaultColor: "#e2ae38"
             onClicked: {
+                modePasswordForgetForDB=0;
                 //loginManager.login(customeridTxt.text,passwordTxt.text)
                 if(LoginManager.loginPassForget(textFieldforgetCostumer.text,textFieldforgetEmail.text)){
                     //stackView.push(passwordForget)
@@ -111,7 +127,7 @@ Item {
             Connections {
                 target: LoginManager
                 onLoginResult: {
-                    console.log("Login result1:", success);
+                    // console.log("Login result1:", success);
                     if(success){
                         //stackView.push("passwordForgetPage.qml")
                     }
@@ -143,6 +159,19 @@ Item {
             }
             placeholderText: qsTr("Email")
             leftPadding: imageTextField1.width+15
+
+            Keys.onTabPressed:{ //textFieldPassword.forceActiveFocus()
+                forgetPassPage1Button.focus=true
+
+            }
+            Keys.onEnterPressed: {
+                forgetPassPage1Button.forceActiveFocus()
+                forgetPassPage1Button.clicked();
+            }
+            Keys.onReturnPressed: {
+                forgetPassPage1Button.forceActiveFocus()
+                forgetPassPage1Button.clicked();
+            }
         }
         }
 
@@ -197,6 +226,8 @@ Item {
         horizontalAlignment: Image.AlignLeft
         source: "logo/back_textField.svg"
         anchors.verticalCenterOffset: -203
+
+
         MouseArea{
             anchors.fill: parent
             anchors.rightMargin: -10
@@ -222,7 +253,7 @@ Item {
         }
 
         ButtonStyle1 {
-            id: button2
+            id: forgetPassPage2Button
             x: 75
             y: 297
             width: 310
@@ -232,12 +263,15 @@ Item {
             backgroundDefaultColor: "#e2ae38"
             onClicked: {
                if(textFieldPassForgetSecAns.text==userInfo[1].sec_ans){
-                    console.log("Güvenlik Sorusu Doğru");
+                    // console.log("Güvenlik Sorusu Doğru");
+                    forgetPassPage2.visible=false;
+                   forgetPassPage3.visible=true;
                 }
                 else{
 
-                    console.log("Güvenlik Sorusu Yanlış.");
-                   console.log("doğrusu: >"+userInfo[1].sec_ans+"<girdiğin: >"+textFieldPassForgetSecAns.text+"<");
+                    // console.log("Güvenlik Sorusu Yanlış.");
+                   // console.log("doğrusu: >"+userInfo[1].sec_ans+"<girdiğin: >"+textFieldPassForgetSecAns.text+"<");
+
                 }
             }
             buttonDropShadow: false
@@ -270,6 +304,18 @@ Item {
             }
             placeholderText: qsTr("Security Question Answer")
             leftPadding: imageTextField1.width+15
+            Keys.onTabPressed:{ //textFieldPassword.forceActiveFocus()
+                forgetPassPage2Button.focus=true
+
+            }
+            Keys.onEnterPressed: {
+                forgetPassPage2Button.forceActiveFocus()
+                forgetPassPage2Button.clicked();
+            }
+            Keys.onReturnPressed: {
+                forgetPassPage2Button.forceActiveFocus()
+                forgetPassPage2Button.clicked();
+            }
         }
 
 
@@ -315,15 +361,352 @@ Item {
     Rectangle {
         id: forgetPassPage3
         visible:false
+        anchors.fill: parent
+        width: stackViewLogin.width
+        height: stackViewLogin.height
+
+        color: "#116A7B"
+        Image {
+        id: backImage3
+        x: 8
+
+        width: 29
+        height: 27
+        anchors.verticalCenter: parent.verticalCenter
+        horizontalAlignment: Image.AlignLeft
+        source: "logo/back_textField.svg"
+        anchors.verticalCenterOffset: -203
+        MouseArea{
+            anchors.fill: parent
+            anchors.rightMargin: -10
+            anchors.leftMargin: -8
+            anchors.topMargin: -8
+            anchors.bottomMargin: -10
+            onClicked: {
+
+                stackViewLogin.pop(null);
+                listOpenPages();}
+        }
+        }
+        Label {
+            id: label35
+            x: 158
+            y: 25
+            text: qsTr("Yatır Bank")
+            font.pixelSize: 30
+            layer.enabled: false
+        }
+        Rectangle {
+        id: __multi__selection1__
+
+        TextField {
+            id: newPasswordForget
+            x: 75
+            y: 128
+            width: 310
+            height: 41
+            scale: 1
+            selectionColor: "#232323"
+            background: Rectangle {
+            radius: 5
+            border.color: "#707070"
+            border.width: 1
+            Image {
+                id: imageTextField2
+                x: parent.x+9
+                width: 20
+                height: 20
+                anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Image.AlignLeft
+                source: "logo/password_textField.svg"
+                }
+            }
+            placeholderText: qsTr("New Password")
+            onTextChanged: { checkPassword(text);text = text.replace(/\s/g, "");}
+            leftPadding: imageTextField.width+15
+            Keys.onTabPressed: {
+                textFieldforgetEmail.focus=true
+
+            }
+            Keys.onEnterPressed: {
+                textFieldforgetEmail.focus=true
+
+            }
+            Keys.onReturnPressed:
+            {
+                textFieldforgetEmail.focus=true
+
+            }
+
+        }
+
+
+        ButtonStyle1 {
+            id: forgetPassPage3Button
+            x: 75
+            y: 297
+            width: 310
+            height: 52
+            text: qsTr("Continue")
+            contentItemTextColor: "#ffffff"
+            backgroundDefaultColor: "#e2ae38"
+            onClicked: {
+                modePasswordForgetForDB=1;
+                //loginManager.login(customeridTxt.text,passwordTxt.text)
+                if(flagPassCheckRule1&flagPassCheckRule2&flagPassCheckRule3)
+                {
+                   LoginManager.loginPassForget2(userInfo[1].username,userInfo[1].email,newPasswordConfirmForget.text);
+                }
+
+
+
+
+
+
+
+            }
+            buttonDropShadow: false
+            anchors.horizontalCenterOffset: 0
+            Connections {
+                target: LoginManager
+                onLoginResult: {
+                    // console.log("Login result1:", success);
+                    if(success){
+                        //stackView.push("passwordForgetPage.qml")
+                    }
+                }
+            }
+        }
+
+        TextField {
+            id: newPasswordConfirmForget
+            x: 75
+            y: 226
+            width: 310
+            height: 41
+            scale: 1
+            selectionColor: "#232323"
+            background: Rectangle {
+                radius: 5
+                border.color: "#707070"
+                border.width: 1
+                Image {
+                    id: imageTextField3
+                    x: parent.x+9
+                    width: 20
+                    height: 20
+                    anchors.verticalCenter: parent.verticalCenter
+                    horizontalAlignment: Image.AlignLeft
+                    source: "logo/password_textField.svg"
+                }
+            }
+            placeholderText: qsTr("New Password Confirm")
+            leftPadding: imageTextField1.width+15
+            onTextChanged: confirmPasswords(newPasswordForget.text,text)
+
+            Keys.onTabPressed:{ //textFieldPassword.forceActiveFocus()
+                forgetPassPage1Button.focus=true
+
+            }
+            Keys.onEnterPressed: {
+                forgetPassPage1Button.forceActiveFocus()
+                forgetPassPage1Button.clicked();
+            }
+            Keys.onReturnPressed: {
+                forgetPassPage1Button.forceActiveFocus()
+                forgetPassPage1Button.clicked();
+            }
+        }
+        }
+
+        Label{
+            id:labelPassCheckRule1
+            x: 82
+            y: 178
+            width: 268
+            height: 17
+            font.pixelSize: 10
+            text:"Between 6 and 32 characters long"
+            leftPadding: imagePassCheckRule1.width+15
+
+            Image {
+                id: imagePassCheckRule1
+
+
+                width: 10
+                height: 10
+                anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Image.AlignLeft
+                source: flagPassCheckRule1 ? "logo/checkMarkBlack.svg":"logo/denailMarkBlack.svg"
+                anchors.verticalCenterOffset: -1
+            }
+
+        }
+        Label{
+            id:labelPassCheckRule2
+            x: 82
+            y: 193
+            width: 268
+            height: 17
+            font.pixelSize: 10
+            text:"Use a mix of letters, numbers or symbols"
+            leftPadding: imagePassCheckRule1.width+15
+
+            Image {
+                id: imagePassCheckRule2
+
+
+                width: 10
+                height: 10
+                anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Image.AlignLeft
+                source: flagPassCheckRule2 ? "logo/checkMarkBlack.svg":"logo/denailMarkBlack.svg"
+                anchors.verticalCenterOffset: -1
+            }
+
+        }
+        Label{
+            id:labelPassCheckRule3
+            x: 82
+            y: 273
+            width: 268
+            height: 17
+            font.pixelSize: 10
+            text:"Password fields must match"
+            leftPadding: imagePassCheckRule1.width+15
+
+            Image {
+                id: imagePassCheckRule3
+
+
+                width: 10
+                height: 10
+                anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Image.AlignLeft
+                source: flagPassCheckRule3 ? "logo/checkMarkBlack.svg":"logo/denailMarkBlack.svg"
+                anchors.verticalCenterOffset: -1
+            }
+
+        }
+
+        Label {
+            id: label45
+            x: 74
+            y: 75
+            width: 75
+            height: 18
+            text: "Identification successful, \nplease enter a new password"
+            font.pixelSize: 15
+            layer.enabled: false
+
+        }
+
+
+
+
+
+    }
+    Rectangle {
+        id:forgetPassPage4
+        visible:false
+        anchors.fill: parent
+        width: stackViewLogin.width
+        height: stackViewLogin.height
+
+        color: "#116A7B"
+
+        Image {
+        id: backImage4
+        x: 150
+
+
+        width: 150
+        height: 150
+        anchors.verticalCenter: parent.verticalCenter
+        horizontalAlignment: Image.AlignLeft
+        source: "logo/confirmGreen.svg"
+        anchors.verticalCenterOffset: -64
+
+        }
+        Label {
+            id: label91
+            x: 114
+            y: 254
+            text: qsTr("Password change Success!!")
+            font.pixelSize: 18
+
+            layer.enabled: false
+        }
+        Label {
+            id: label34
+            x: 158
+            y: 25
+            text: qsTr("Yatır Bank")
+            font.pixelSize: 30
+            layer.enabled: false
+        }
+        ButtonStyle1 {
+            id: forgetPassPage4Button
+            x: 75
+            y: 297
+            width: 310
+            height: 52
+            text: qsTr("Continue")
+            contentItemTextColor: "#ffffff"
+            backgroundDefaultColor: "#e2ae38"
+            onClicked: {
+                forgetPassPage4.visible=false;
+                forgetPassPage1.visible=true;
+                stackViewLogin.pop(null);
+
+                listOpenPages();
+
+            }
+            buttonDropShadow: false
+            anchors.horizontalCenterOffset: 0
+            Connections {
+                target: LoginManager
+                onLoginResult: {
+                    // console.log("Login result1:", success);
+                    if(success){
+                        //stackView.push("passwordForgetPage.qml")
+                    }
+                }
+            }
+        }
 
     }
 
+    function confirmPasswords(password1,password2)
+    {
+
+        flagPassCheckRule3 = (password1==password2)
+        return flagPassCheckRule3
+    }
+
+    function checkPassword(password) {
+           // Şifre kontrol koşulları
+           flagPassCheckRule1 = password.length >= 6 && password.length <= 32 ? 1 : 0
+           // console.log("6-32 arasında mı: "+flagPassCheckRule1)
+           if(flagPassCheckRule1)
+           {
+               var regex1 = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,32}$/
+
+               flagPassCheckRule2 = regex1.test(password) ? 1 : 0
+               // console.log("regex1 testi: "+flagPassCheckRule2)
+           }
+           else
+           {
+               flagPassCheckRule2 = 0
+           }
+
+       }
     function passwordForgetDataGeldi(result,mode) {
         // inputParam değişkenini kullanabilirsiniz
         if(mode==0)
         {
         var succes = result[0];
-         console.log("Succes: " + succes);
+         // console.log("Succes: " + succes);
         if(succes){
             var username  = result[1].username;
             var password  = result[1].password;
@@ -334,14 +717,14 @@ Item {
             var sec_ques  = result[1].sec_ques;
             var sec_ans  = result[1].sec_ans;
 
-            console.log("userName: " + username);
-            console.log("password: " + password);
-            console.log("email: " + email);
-            console.log("firstname: " + firstname);
-            console.log("lastname: " + lastname);
-            console.log("age: " + age);
-            console.log("sec_ques: " + sec_ques);
-            console.log("sec_ans: " + sec_ans);
+            // console.log("userName: " + username);
+            // console.log("password: " + password);
+            // console.log("email: " + email);
+            // console.log("firstname: " + firstname);
+            // console.log("lastname: " + lastname);
+            // console.log("age: " + age);
+            // console.log("sec_ques: " + sec_ques);
+            // console.log("sec_ans: " + sec_ans);
 
             // 2. sayfaya geçiliyor
             forgetPassPage1.visible=false;
@@ -352,14 +735,28 @@ Item {
         }
         else{
             var errorMessage  = result[1];
-            console.log("errorMessage: " + errorMessage);
+            // console.log("errorMessage: " + errorMessage);
             labelErrorPassForget1.text=errorMessage;
             labelErrorPassForget1.visible=true;
         }
-        console.log("Input Parametre: " + result);
+        //// console.log("Input Parametre: " + result);
         }
         else if(mode==1)
         {
+            // mode 1 şifre başarıyla değişti demektir
+            var succes = result[0];
+
+
+            if(succes)
+            {
+               // // console.log("Password Change Succes control 1 : " + succes);
+                forgetPassPage3.visible=false;
+                forgetPassPage4.visible=true;
+            }
+            else
+            {
+              // // console.log("Password Change Succes: " + succes + "Error Message: ",result[1]);
+            }
 
         }
     }
@@ -369,7 +766,7 @@ Item {
         for (var i = 0; i < stackViewLogin.depth; i++) {
             var page = stackViewLogin.get(i);
             if (page) {
-                console.log("Açık Sayfa:", page);
+               // // console.log("Açık Sayfa:", page);
             }
         }
 
@@ -378,9 +775,9 @@ Item {
 
     Connections{
         target: LoginManager
-        onPasswordForgetResponse:{
+        onPasswordForgetResponse: {
             userInfo=response;
-            passwordForgetDataGeldi(response,0);
+            passwordForgetDataGeldi(response,modePasswordForgetForDB);
         }
     }
 

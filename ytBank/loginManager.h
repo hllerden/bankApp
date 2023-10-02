@@ -35,6 +35,7 @@ public slots:
     QVariant loginPassForget2(const QString &username, const QString &email,  const QString &newPass = QString());
 
     bool loginRequest(const QString &username, const QString &password);
+    bool newPassword(const QString &newpassword);
     void doSomething();
 };
 

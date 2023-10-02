@@ -135,9 +135,7 @@ bool loginManager::loginPassForget(const QString &username, const QString &email
 
             bool success = query.next();
             qDebug()<< "[loginPassForget::1.Aşama]"  << "PassForget Login result:" << success;
-
-
-
+            db.close();
 
         }
         else
@@ -207,7 +205,7 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
     QVariantMap userInfo;
     // Qvaryant Yapısı  | bool isErrorMessageExis?|error Message|info| 1.adım user&mail check Bool | user first name | String Question to Qml | secQuestCheck Bool |newPassChekOk&chance bool |
 
-    if(!username.isEmpty() & !email.isEmpty())
+    if(!username.isEmpty() & !email.isEmpty() & newPass.isEmpty())
     {
         QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
         db.setDatabaseName(path);
@@ -228,7 +226,7 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
 
             userInfo["username"] = query.value(1).toString();
             userInfo["password"] = query.value(2).toString();
-            userInfo["email"] = query.value(3).toInt();
+            userInfo["email"] = query.value(3).toString();
             userInfo["firstname"] = query.value(4).toString();
             userInfo["lastname"] = query.value(5).toString();
             userInfo["age"] = query.value(6).toInt();
@@ -236,6 +234,8 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
             userInfo["sec_ans"] = query.value(8).toString();
 
             result << true <<userInfo;
+            db.close();
+
             emit passwordForgetResponse(QVariant::fromValue(result));
             return QVariant::fromValue(result);
         }
@@ -246,11 +246,48 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
 
                 return QVariant::fromValue(result);
         }
+    }
+    else if(!username.isEmpty() & !email.isEmpty() & !newPass.isEmpty())
+    {
+        // username
+        // email
+        // new password
+        // everything is ok change the password from database
 
+        qDebug()<< "Gönderilen bilgiler: <" << username <<"<"<< email<<"<" << newPass;
+
+        QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName(path);
+        QSqlQuery query;
+        if (!db.open()) {
+                qDebug()<< "[loginPassForget::3.Aşama]" << "Veritabanına bağlanılamadı: " << db.lastError().text();
+        } else {
+                qDebug()<< "[loginPassForget::3.Aşama]"  << "Veritabanına başarıyla bağlandı.";
+        }
+        query.prepare("UPDATE users SET password = :password WHERE username = :username AND email = :email");
+        query.bindValue(":password", newPass);
+        query.bindValue(":username", username);
+        query.bindValue(":email", email);
+
+        if(query.exec())
+        {
+                result << true <<" Şifre değiştirme işlemi başarılı" ;
+                emit passwordForgetResponse(QVariant::fromValue(result));
+                return QVariant::fromValue(result);
+                db.close();
+        }
+        else
+        {
+               qDebug()<< "[loginPassForget::3.Aşama]"  <<"Şifre değiştirme işlemi başarısız" << query.lastError().text();
+               result << false <<" Şifre değiştirme işlemi başarısız";
+                emit passwordForgetResponse(QVariant::fromValue(result));
+                return QVariant::fromValue(result);
+
+        }
 
     }
-    else
-    {
+    else{
+        qInfo()<<"Else niye giriyor : " << username <<"<"<< email<< "<" << newPass << "isemty result"<<!username.isEmpty()<<"<"<<!email.isEmpty()<<"<"<<!newPass.isEmpty();
         result << false << "Kullanıcı adı veya email boş olamaz!" << "";
             emit passwordForgetResponse(QVariant::fromValue(result));
 
@@ -265,6 +302,33 @@ bool loginManager::loginRequest(const QString &username, const QString &password
 {
     qDebug() << "Login request received:" << username << password;
     return login(username, password);
+}
+
+bool loginManager::newPassword(const QString &newpassword)
+{
+    qDebug() << "New Password request received:" << newpassword;
+
+    QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(path);
+    QSqlQuery query;
+
+    if (!db.open()) {
+        qDebug()<< "[loginPassForget::1.Aşama]" << "Veritabanına bağlanılamadı: " << db.lastError().text();
+    } else {
+        qDebug()<< "[loginPassForget::1.Aşama]"  << "Veritabanına başarıyla bağlandı.";
+    }
+
+    //query.prepare("UPDATE users SET password = :password WHERE username = :username");
+    query.prepare("UPDATE users SET password = :password WHERE username = :username AND email = :email");
+    query.bindValue(":password", newpassword);
+
+
+
+
+
+
+
+    return true;
 }
 
 

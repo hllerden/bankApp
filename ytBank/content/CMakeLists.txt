@@ -23,6 +23,9 @@ qt6_add_qml_module(content
         logo/password_textField.svg
         logo/email_textField.svg
         logo/back_textField.svg
+        logo/checkMarkBlack.svg
+        logo/denailMarkBlack.svg
+        logo/confirmGreen.svg
         FloatingButton_Unavailable.svg
         FloatingButton_Available.svg
         FloatingButton_Active.svg
