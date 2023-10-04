@@ -206,7 +206,7 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
         if((query.exec()&&query.next()))
         {   QVariantMap userInfo;
             qDebug()<< "[loginPassForget::2.Aşama]"  << "PassForget Login result:" << true;
-
+            /*
             userInfo["username"] = query.value(1).toString();
             userInfo["password"] = query.value(2).toString();
             userInfo["email"] = query.value(3).toString();
@@ -215,6 +215,14 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
             userInfo["age"] = query.value(6).toInt();
             userInfo["sec_ques"] = query.value(7).toString();
             userInfo["sec_ans"] = query.value(8).toString();
+            */
+            QSqlRecord record = query.record();
+            for (int i = 0; i < record.count(); ++i) {
+                QString fieldName = record.fieldName(i);
+                QVariant value = query.value(i);
+                userInfo[fieldName] = value;
+            }
+            qDebug() << "userInfo:" << userInfo;
 
             result << true <<userInfo;
             db.close();

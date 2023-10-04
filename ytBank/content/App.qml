@@ -20,7 +20,7 @@ Window {
     minimumHeight: Constants.height
     visible: true
     title: "YTB Bank     |     Yatir Bank Customer Special Area of Interest"
-
+    property var loginedUserInfo : null
 
     // global bool değişkeni yaz
     property bool stackviewWhichPageOpen: false
@@ -46,7 +46,7 @@ Window {
         // add stackwiew
         StackView {
                 id: stackViewMainApp
-                initialItem:  mainScreenHome
+                initialItem:  loginPage
                 anchors.fill: parent
                 Component {id: loginPage;LoginMain {}}
                 Component {id: mainScreenHome;MainScreenHome {}}
@@ -154,49 +154,6 @@ Window {
 
 
 
-//********* Input panel sinyalli örnek*****************************
-
-//----------- Auto created for keyboard----------------
-/*
-InputPanel {
-    id: inputPanel
-    property bool showKeyboard :  active
-    signal keyboardActiveChanged(bool isActive)
-
-    y: showKeyboard ? parent.height - height : parent.height
-    Behavior on y
-    {
-        NumberAnimation
-        {
-            duration: 200
-            easing.type: Easing.InOutQuad
-        }
-    }
-    // anchors.leftMargin: Constants.width/10
-    // anchors.rightMargin: Constants.width/10
-    anchors.left: parent.left
-    anchors.right: parent.right
-
-    onShowKeyboardChanged:
-    {
-
-        //  BU kod bir sinyal ve connect örneğidir
-        showKeyboard ? keyboardActiveChanged(true) : keyboardActiveChanged(false);
-        console.log(showKeyboard);
-
-    }
-}
-
-function keyboardActiveChanged()
-{
-    console.log("Klavye aktif.");
-    flickableLogin.interactive= true;
-    flickableLogin.anchors.bottomMargin=inputPanel.height; // klavye açıldığında boyutu
-}
-//-----------------------------------------------------
-
-
-*/
 
 
 

@@ -265,6 +265,7 @@ Item {
                         console.log("Login result1:", success);
                         if(success){
                             //stackView.push("passwordForgetPage.qml")
+                            // giriş başarılı ise
                             loginFailedLabel.visible=false
                             stackViewMainApp.pop(null);
                             stackViewMainApp.push(mainScreenHome);
