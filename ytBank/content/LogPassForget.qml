@@ -9,11 +9,13 @@ Item {
     id: forgetPassPageBase
     anchors.fill: stackViewLogin
     visible:true
+
     property var userInfo: null
     property bool flagPassCheckRule1: false // Şifre geçerliliğini göstermek için bir bayrak1 6-32
     property bool flagPassCheckRule2: false // Şifre geçerliliğini göstermek için bir bayrak2 Büyük Küçük Farkı
     property bool flagPassCheckRule3: false // Şifre geçerliliğini göstermek için bir bayrak3 iki şifre uyumlu
     property int modePasswordForgetForDB: 0
+
     Rectangle {
         visible:true
 
@@ -22,7 +24,7 @@ Item {
         width: stackViewLogin.width
         height: stackViewLogin.height
 
-        color: "#116A7B"
+        color: Constants.basegroundColor
 
         Image {
         id: backImage
@@ -215,7 +217,7 @@ Item {
         width: stackViewLogin.width
         height: stackViewLogin.height
 
-        color: "#116A7B"
+        color: Constants.basegroundColor
         Image {
         id: backImage2
         x: 8
@@ -365,7 +367,7 @@ Item {
         width: stackViewLogin.width
         height: stackViewLogin.height
 
-        color: "#116A7B"
+        color: Constants.basegroundColor
         Image {
         id: backImage3
         x: 8
@@ -613,7 +615,7 @@ Item {
         width: stackViewLogin.width
         height: stackViewLogin.height
 
-        color: "#116A7B"
+        color:Constants.basegroundColor
 
         Image {
         id: backImage4

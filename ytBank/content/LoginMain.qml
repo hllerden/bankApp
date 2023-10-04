@@ -14,7 +14,8 @@ import ytBank
 Rectangle {
     width: Constants.width
     height: Constants.height
-    color: "#116a7b"
+    color: Constants.basegroundColor
+
 
     // If enabled, prevents interaction with the text fields
    // property bool handwritingInputPanelActive: false

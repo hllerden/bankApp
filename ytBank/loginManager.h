@@ -24,7 +24,7 @@ private:
     QDir databasePath;
     QString path=databasePath.currentPath()+"/userInformations.db"; // Not "myDb.db"
 signals:
-    void loginResult(const bool success);
+    void loginResult(const bool &success);
     void passwordForgetResponse(const QVariant &response);
 public slots:
     //bool loginPassForgetStep1(const QString &username, const QString &email);                           // ilk olarak kullanıcı adı ve email doğruysa true döndürüp kullanıcıya güvenlik sorusunu soracak.

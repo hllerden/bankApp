@@ -8,10 +8,12 @@ qt6_add_qml_module(content
     QML_FILES
         App.qml
         AutoScroller.qml
-        HandwritingModeButton.qml
+       ## HandwritingModeButton.qml
         LoginMain.qml
         LogLogin.qml
         LogPassForget.qml
+        MainScreenHome.qml
+        SideBar.qml
 
 
     RESOURCES
@@ -26,10 +28,15 @@ qt6_add_qml_module(content
         logo/checkMarkBlack.svg
         logo/denailMarkBlack.svg
         logo/confirmGreen.svg
+        logo/side/home_white_ebe9ea.svg
+        logo/side/person_white_ebe9ea.svg
+        logo/side/menu_white_ebe9ea.svg
         FloatingButton_Unavailable.svg
         FloatingButton_Available.svg
         FloatingButton_Active.svg
         QML_FILES ButtonStyle1.qml
+        QML_FILES SideBarButton.qml
+        QML_FILES MainWellcome.qml
 
 
 

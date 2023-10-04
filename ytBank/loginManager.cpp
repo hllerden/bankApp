@@ -24,7 +24,38 @@ loginManager::loginManager(QObject *parent)
                       "lastname TEXT,"
                       "age INTEGER,"
                       "sec_ques TEXT,"
-                      "sec_ans TEXT"
+                      "sec_ans TEXT,"
+                      "phone_number	TEXT,"
+                      "address	TEXT,"
+                      "city	TEXT,"
+                      "state	TEXT,"
+                      "postal_code	INTEGER,"
+                      "country	TEXT,"
+                      "nationality	TEXT,"
+                      "gender	TEXT,"
+                      "date_of_birth	TEXT,"
+                      "occupation	TEXT,"
+                      "income	REAL,"
+                      "account_balance	REAL,"
+                      "credit_score	INTEGER,"
+                      "credit_limit	REAL,"
+                      "account_type	TEXT,"
+                      "account_number	REAL,"
+                      "account_open_date	TEXT,"
+                      "account_status	TEXT,"
+                      "last_login	TEXT,"
+                      "transaction_history	TEXT,"
+                      "debit_card_number	REAL,"
+                      "debit_card_expiry TEXT,"
+                      "debit_card_cvv	INTEGER,"
+                      "credit_card_number	REAL,"
+                      "credit_card_expiry	TEXT,"
+                      "credit_card_cvv	INTEGER,"
+                      "loan_amount	REAL,"
+                      "loan_interest_rate	REAL,"
+                      "loan_approval_date	TEXT,"
+                      "loan_duration	INTEGER,"
+                      "loan_repayment_amount	REAL"
                       ")");
 
 
@@ -39,7 +70,7 @@ loginManager::loginManager(QObject *parent)
         //QSqlQuery query;
 
         qDebug() << "Database already exists";
-       // addPerson("admin","1234","admin@admin.com","admin","adminoğlu",26,"kayinco tatlı yedi tatladı....","bende öpücük aldım");
+        //addPerson("admin","12345","admin@admin.com","admin","adminoğlu",26,"kayinco tatlı yedi tatladı....","bende öpücük aldım");
     }
 
 }
@@ -149,55 +180,7 @@ bool loginManager::loginPassForget(const QString &username, const QString &email
 
     }
 }
-/*
-QVariant loginManager::loginPassForget2(const QString &username, const QString &email, const QString &sec_ans, const QString &newPass)
-{
-    QVariantList result;
-    // Qvaryant Yapısı  | bool isErrorMessageExis?|error Message|info| 1.adım user&mail check Bool | user first name | String Question to Qml | secQuestCheck Bool |newPassChekOk&chance bool |
-    if(newPass.isEmpty()) // eğer yeni şifre yoksa
-    {
-        if(sec_ans.isEmpty())
-        {
-            // ilk aşamadadır.
-            // bu aşamada username ve pass geliyor.databaseden kontorl edilip onay dönecek.
-            // onay dönerse 2. aşamaya geçecek.
-            QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
-            db.setDatabaseName(path);
-            QSqlQuery query;
-            if (!db.open()) {
-                qDebug()<< "[loginPassForget::1.Aşama]" << "Veritabanına bağlanılamadı: " << db.lastError().text();
-            } else {
-                qDebug()<< "[loginPassForget::1.Aşama]"  << "Veritabanına başarıyla bağlandı.";
-            }
-            query.prepare("SELECT * FROM users WHERE username = :username AND email = :email");
-            query.bindValue(":username", username);
-            query.bindValue(":email", email);
-            query.exec();
 
-            bool success = query.next();
-
-            qDebug()<< "[loginPassForget::1.Aşama]"  << "PassForget Login result:" << success;
-            QString errorMessage = success ? "" : "Kullanıcı adı veya email yanlış";
-            QString info = success ? query.value("firstname").toString() : "";
-
-            result << true << "Şifre değiştirme işlemi başarılı" << "";
-
-            return QVariant::fromValue(result);
-
-
-        }
-        else
-        {
-            // ikinci aşamadadır.
-        }
-    }
-    else
-    {
-        // yeni şifre varsa 3. aşamadadır.
-
-    }
-}
-*/
 
 QVariant loginManager::loginPassForget2(const QString &username, const QString &email, const QString &newPass)
 {
@@ -241,7 +224,7 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
         }
         else
         {
-            result << false << "Kullanıcı adı veya email uyuşmuyor!" << "";
+            result << false << "Username or email does not match!" << "";
                 emit passwordForgetResponse(QVariant::fromValue(result));
 
                 return QVariant::fromValue(result);
@@ -288,7 +271,7 @@ QVariant loginManager::loginPassForget2(const QString &username, const QString &
     }
     else{
         qInfo()<<"Else niye giriyor : " << username <<"<"<< email<< "<" << newPass << "isemty result"<<!username.isEmpty()<<"<"<<!email.isEmpty()<<"<"<<!newPass.isEmpty();
-        result << false << "Kullanıcı adı veya email boş olamaz!" << "";
+        result << false << "Username or email cannot be empty!" << "";
             emit passwordForgetResponse(QVariant::fromValue(result));
 
         return QVariant::fromValue(result);

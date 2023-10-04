@@ -19,7 +19,7 @@ Window {
     minimumWidth: Constants.width
     minimumHeight: Constants.height
     visible: true
-    title: "YTB Bank     |     Yatır Bank Müşteri Özel İlgilenme Alanı"
+    title: "YTB Bank     |     Yatir Bank Customer Special Area of Interest"
 
 
     // global bool değişkeni yaz
@@ -43,19 +43,15 @@ Window {
 
         ScrollBar.vertical: ScrollBar {}
 
-
         // add stackwiew
         StackView {
-                id: stackView
-                initialItem:  loginPage
+                id: stackViewMainApp
+                initialItem:  mainScreenHome
                 anchors.fill: parent
+                Component {id: loginPage;LoginMain {}}
+                Component {id: mainScreenHome;MainScreenHome {}}
+        }
 
-        }
-        Component {
-            id: loginPage
-            LoginMain {
-            }
-        }
 
 
 

@@ -19,7 +19,7 @@ Item {
         width: stackViewLogin.width
         height: stackViewLogin.height
 
-        color: "#116A7B"
+        color: Constants.basegroundColor
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -41,7 +41,7 @@ Item {
             id: label4
             x: 64
             y: 28
-            text: qsTr("Yatır Banka Hoş Geldiniz")
+            text: qsTr("Welcome to Yatır Banka")
             font.pixelSize: 30
             layer.enabled: false
         }
@@ -50,7 +50,7 @@ Item {
             id: label5
             x: 72
             y: 62
-            text: qsTr("Siz yatırın Biz Batıralım")
+            text: qsTr("You invest it, we screw it")
             font.pixelSize: 14
         }
 
@@ -266,6 +266,8 @@ Item {
                         if(success){
                             //stackView.push("passwordForgetPage.qml")
                             loginFailedLabel.visible=false
+                            stackViewMainApp.pop(null);
+                            stackViewMainApp.push(mainScreenHome);
                         }
                         else{
                         console.log("Login başarısız Label görünür hale getirildi.");
@@ -274,29 +276,30 @@ Item {
                         }
                     }
                 }
-
             }
-
         }
 
         GroupItem {
+            id:grouplogloginSignUp
             x: 114
             y: 410
-
+            width: 251
+            height: 17
+            anchors.centerIn:buttonlogin
             Label {
                 id: labelSignUpLogin
                 x: 0
                 y: 0
-                text: qsTr("Yeni müşteri misin ?")
+                text: qsTr("Are you a new customer?")
                 //anchors.right: label4.right
                 font.pixelSize: 14
             }
 
             Label {
-                text: qsTr("Hemen Üye Ol ?")
+                text: qsTr("Sign Up Now ?")
 
                 id:labelSignUpLoginClickable
-                x: 127
+                x: labelSignUpLogin.width+5
                 y: 0
                 color: "#0008FF"
 
